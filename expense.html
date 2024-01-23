@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Expense Tracker</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #b95b5b;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+        }
+
+        #expense-form {
+            text-align: center;
+            padding: 20px;
+            background-color: #d35b5b;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        #expense-list {
+            margin-top: 20px;
+        }
+
+        .expense-item {
+            background-color: #a15050;
+            padding: 10px;
+            margin-bottom: 5px;
+            border-radius: 4px;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        #logo {
+            width: 100px;
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div id="expense-form">
+        <img id="logo" src="expense_tracker_logo.png" alt="Expense Tracker Logo">
+        <h2>Expense Tracker</h2>
+        <form id="add-expense-form">
+            <label for="category">Category:</label>
+            <input type="text" id="category" required>
+
+            <label for="amount">Amount:</label>
+            <input type="number" id="amount" required>
+
+            <button type="button" onclick="addExpense()">Add Expense</button>
+        </form>
+    </div>
+
+    <div id="expense-list">
+        <h3>Expense List</h3>
+        <div id="expenses"></div>
+        <p id="total-expenses">Total Expenses: $0.00</p>
+    </div>
+
+    <script>
+        const expenses = [];
+
+        function addExpense() {
+            const category = document.getElementById('category').value;
+            const amount = parseFloat(document.getElementById('amount').value);
+
+            if (!category || isNaN(amount) || amount <= 0) {
+                alert("Please enter valid values for category and amount.");
+                return;
+            }
+
+            expenses.push({ category, amount });
+            updateExpenseList();
+            updateTotalExpenses();
+            clearForm();
+        }
+
+        function updateExpenseList() {
+            const expensesContainer = document.getElementById('expenses');
+            expensesContainer.innerHTML = '';
+
+            expenses.forEach(expense => {
+                const expenseItem = document.createElement('div');
+                expenseItem.classList.add('expense-item');
+                expenseItem.innerHTML = `
+                    <span>${expense.category}</span>
+                    <span>$${expense.amount.toFixed(2)}</span>
+                `;
+                expensesContainer.appendChild(expenseItem);
+            });
+        }
+
+        function updateTotalExpenses() {
+            const totalExpenses = expenses.reduce((total, expense) => total + expense.amount, 0);
+            document.getElementById('total-expenses').textContent = `Total Expenses: $${totalExpenses.toFixed(2)}`;
+        }
+
+        function clearForm() {
+            document.getElementById('category').value = '';
+            document.getElementById('amount').value = '';
+        }
+    </script>
+</body>
+</html>
